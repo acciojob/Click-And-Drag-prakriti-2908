@@ -36,6 +36,59 @@
 
 <script>
 //Your code goes here 
+	
+//select item to be dragged
+
+let eachItem = document.getElementsByClassName("item");
+
+// eachItem.id = "item-"+Date.now();
+
+// console.log(eachItem, typeof eachItem);        //object
+
+
+//enable draggable
+
+[...eachItem].forEach(item=>{
+    item.setAttribute("draggable",true);
+})
+
+
+// give unique id
+
+for(let t of eachItem){
+    // console.log(t,typeof t);
+    t.id = "item-"+Date.now();
+    // console.log(t,t.id);
+}
+
+
+//dragstart
+
+let dragEvents = ["dragover","dragenter","drop"];
+
+
+[...eachItem].forEach(item=>{
+    let neww = item;
+    item.addEventListener("dragstart",(e)=>{
+        e.dataTransfer.setData("text/plain",item.id);
+    })
+    item.addEventListener("dragover",(e)=>{
+        e.preventDefault();
+    })
+    item.addEventListener("dragenter",(e)=>{
+        e.preventDefault();
+    })
+    item.addEventListener("drop",(e)=>{
+        let cardId = e.dataTransfer.getData("text/plain");
+        let card = document.getElementById(cardId);
+        // item = {};
+        item.append(card);
+        // card = {};
+        // card.append(neww);
+        // e.target={};
+    })
+})
+
 </script>
 
   </body>
