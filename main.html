@@ -37,58 +37,35 @@
 <script>
 //Your code goes here 
 	
-//select item to be dragged
+const items = document.querySelector('.items');
+    let isMouseDown = false;
+    let startX, scrollLeft;
 
-let eachItem = document.getElementsByClassName("item");
+    items.addEventListener('mousedown', (e) => {
+      isMouseDown = true;
+      startX = e.pageX - items.offsetLeft;
+      scrollLeft = items.scrollLeft;
+      items.classList.add('active');
+    });
 
-// eachItem.id = "item-"+Date.now();
+    items.addEventListener('mouseleave', () => {
+      isMouseDown = false;
+      items.classList.remove('active');
+    });
 
-// console.log(eachItem, typeof eachItem);        //object
+    items.addEventListener('mouseup', () => {
+      isMouseDown = false;
+      items.classList.remove('active');
+    });
 
+    items.addEventListener('mousemove', (e) => {
+      if (!isMouseDown) return;
+      e.preventDefault();
+      const x = e.pageX - items.offsetLeft;
+      const walk = (x - startX) * 3; // Adjust the speed of scrolling
 
-//enable draggable
-
-[...eachItem].forEach(item=>{
-    item.setAttribute("draggable",true);
-})
-
-
-// give unique id
-
-for(let t of eachItem){
-    // console.log(t,typeof t);
-    t.id = "item-"+Date.now();
-    // console.log(t,t.id);
-}
-
-
-//dragstart
-
-let dragEvents = ["dragover","dragenter","drop"];
-
-
-[...eachItem].forEach(item=>{
-    let neww = item;
-    item.addEventListener("dragstart",(e)=>{
-        e.dataTransfer.setData("text/plain",item.id);
-    })
-    item.addEventListener("dragover",(e)=>{
-        e.preventDefault();
-    })
-    item.addEventListener("dragenter",(e)=>{
-        e.preventDefault();
-    })
-    item.addEventListener("drop",(e)=>{
-        let cardId = e.dataTransfer.getData("text/plain");
-        let card = document.getElementById(cardId);
-        // item = {};
-        item.append(card);
-        // card = {};
-        // card.append(neww);
-        // e.target={};
-    })
-})
-
+      items.scrollLeft = scrollLeft - walk;
+    });
 </script>
 
   </body>
